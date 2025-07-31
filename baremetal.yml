@@ -1,0 +1,16 @@
+- name: Install and configure Incus and its whole stack
+  hosts: all
+  order: shuffle
+  gather_facts: true
+  gather_subset:
+    - "default_ipv4"
+    - "default_ipv6"
+    - "distribution_release"
+  any_errors_fatal: true
+  vars:
+    ansible_user: ansible
+    ansible_become: yes
+    ansible_become_method: sudo
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - role: system_settings
