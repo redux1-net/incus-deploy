@@ -5,6 +5,7 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     state: present
+    sysctl_file: /etc/sysctl.d/10-incus-deploy.conf
   loop:
     - { name: "fs.aio-max-nr", value: "524288"}
     - { name: "fs.inotify.max_queued_events", value: "1048576"}
@@ -23,6 +24,7 @@
     limit_type: "{{ item.limit_type }}"
     limit_item: "{{ item.limit_item }}"
     value: "{{ item.value }}"
+    dest: /etc/security/limits.d/10-incus-deploy.conf
   loop:
     - { domain: "*", limit_type: "soft", limit_item: "nofile", value: "1048576"}
     - { domain: "*", limit_type: "hard", limit_item: "nofile", value: "1048576"}
