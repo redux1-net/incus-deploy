@@ -5,6 +5,7 @@ all:
    #ceph_rbd_cache_max: "1792Mi"
    #ceph_rbd_cache_target: "1536Mi"
     ceph_release: "distro"
+    ceph_ipv6_only: false
 
     incus_name: "baremetal"
     incus_release: "stable"
@@ -64,41 +65,28 @@ all:
               local_config:
                 source: "incus_{{ incus_name }}"
               description: Distributed storage pool (cluster-wide)
-            linstor:
-              driver: linstor
-              local_config:
-                source: "{{ linstor_pool_name }}"
-              description: Linstor storage pool (cluster-wide)
-            shared:
-              driver: lvmcluster
-              local_config:
-                lvm.vg_name: "vg0"
-                source: "vg0"
-              default: true
-              description: Shared storage pool (cluster-wide)
 
         incus_roles:
           - cluster
           - ui
-
-        lvmcluster_metadata_size: 100m
-        lvmcluster_vgs:
-          vg0: "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_incus_disk4"
 
         ovn_roles:
           - host
       hosts:
         incus1:
           ansible_host: 192.168.100.211
+          ceph_ip_address: 192.168.66.11
+          ceph_network_public: 192.168.100.0/24
+          ceph_network_private: 192.168.66.0/24
           ceph_disks:
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk1
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk2
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi1
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi2
           ceph_roles:
             - client
             - mon
-            - mds
-            - mgr
             - osd
+            - mgr
+           #- mds
 
           ovn_roles:
             - central
@@ -106,15 +94,18 @@ all:
 
         incus2:
           ansible_host: 192.168.100.212
+          ceph_ip_address: 192.168.66.12
+          ceph_network_public: 192.168.100.0/24
+          ceph_network_private: 192.168.66.0/24
           ceph_disks:
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk1
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk2
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi1
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi2
           ceph_roles:
             - client
             - mon
-            - mds
-            - mgr
             - osd
+            - mgr
+           #- mds
 
           ovn_roles:
             - central
@@ -122,15 +113,18 @@ all:
 
         incus3:
           ansible_host: 192.168.100.213
+          ceph_ip_address: 192.168.66.13
+          ceph_network_public: 192.168.100.0/24
+          ceph_network_private: 192.168.66.0/24
           ceph_disks:
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk1
-            - data: nvme-QEMU_NVMe_Ctrl_incus_disk2
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi1
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi2
           ceph_roles:
             - client
             - mon
-            - mds
-            - mgr
             - osd
+            - mgr
+           #- mds
 
           ovn_roles:
             - central
