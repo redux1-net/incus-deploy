@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 - name: Create cluster directory
+  vars:
+    ansible_become: false
   delegate_to: 127.0.0.1
   ansible.builtin.file:
     path: "{{ ovn_config_dir }}/{{ ovn_name }}"
@@ -10,6 +12,8 @@
   when: '"central" in ovn_roles or "host" in ovn_roles'
 
 - name: Create CA private key
+  vars:
+    ansible_become: false
   delegate_to: 127.0.0.1
   community.crypto.openssl_privatekey:
     path: "{{ ovn_config_dir }}/ca.key"
@@ -18,6 +22,8 @@
   when: '"central" in ovn_roles or "host" in ovn_roles'
 
 - name: Create server keys
+  vars:
+    ansible_become: false
   delegate_to: 127.0.0.1
   community.crypto.openssl_privatekey:
     path: "{{ ovn_config_dir }}/{{ inventory_hostname }}.key"
@@ -25,6 +31,8 @@
   when: 'ovn_roles | length > 0'
 
 - name: Create client keys
+  vars:
+    ansible_become: false
   delegate_to: 127.0.0.1
   community.crypto.openssl_privatekey:
     path: "{{ ovn_config_dir }}/{{ item }}.key"
