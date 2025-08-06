@@ -30,5 +30,28 @@
   notify: Update apt
   when: 'incus_roles|length > 0 and incus_release != "distro" and ansible_distribution in ("Ubuntu", "Debian")'
 
+- name: Add debian repo
+  deb822_repository:
+    name: debian
+    types: deb
+    uris: http://deb.debian.org/debian
+    suites:
+      - "{{ ansible_distribution_release }}"
+      - "{{ ansible_distribution_release }}-updates"
+    components:
+      - contrib
+  notify: Update apt
+
+- name: Add debian-security repo
+  deb822_repository:
+    name: debian-security
+    types: deb
+    uris: http://security.debian.org/debian-security
+    suites:
+      - "{{ ansible_distribution_release }}-security"
+    components:
+      - contrib
+  notify: Update apt
+
 - name: Force the handler executions
   ansible.builtin.meta: flush_handlers
