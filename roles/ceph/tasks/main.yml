@@ -28,7 +28,7 @@
 
 - name: Create cluster keys
   ansible.builtin.import_tasks: create_keys.yml
-  when: "ceph_fsid and lookup('template', 'ceph.monitors.names.j2') | from_yaml | sort | first == inventory_hostname"
+  when: "ceph_fsid is defined and lookup('template', 'ceph.monitors.names.j2') | from_yaml | sort | first == inventory_hostname"
 
 - name: Force handler execution
   ansible.builtin.meta: flush_handlers
