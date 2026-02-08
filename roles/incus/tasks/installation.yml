@@ -47,12 +47,12 @@
   when: "incus_roles | length > 0 and 'lvm' in incus_init['storage'] | dict2items | json_query('[].value.driver')"
 
 ## TODO much simpler and enough for default kernels?
-- name: Install the linux-headers package (deb)
-  ansible.builtin.apt:
-    name:
-      - linux-headers-generic
-    install_recommends: false
-    state: present
+##- name: Install the linux-headers package (deb)
+##  ansible.builtin.apt:
+##    name:
+##      - linux-headers-generic
+##    install_recommends: false
+##    state: present
 
 ## TODO clarify if below is needed, or if installation of linux-headers-generic is sufficient?
 ## - name: List installed kernel images

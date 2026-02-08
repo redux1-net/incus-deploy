@@ -42,6 +42,7 @@
     components:
       - contrib
   notify: Update apt
+  when: 'ansible_distribution in ("Debian")'
 
 - name: Add debian-security repo
   deb822_repository:
@@ -54,6 +55,7 @@
     components:
       - contrib
   notify: Update apt
+  when: 'ansible_distribution in ("Debian")'
 
 - name: Force the handler executions
   ansible.builtin.meta: flush_handlers
