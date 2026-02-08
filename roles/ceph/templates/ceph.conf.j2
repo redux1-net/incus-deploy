@@ -1,16 +1,19 @@
 {% set monitors = lookup('template', 'ceph.monitors.j2') | from_yaml | default([]) %}
-{% set addresses = monitors | map(attribute='ip') | map('regex_replace', '^(.*)$', '[\\1]:6789') | sort | join(',') -%}
+{% set addresses = monitors | map(attribute='ip') | sort | join(',') -%}
 {% set names = monitors | map(attribute='name') | sort | join(',') -%}
 # Managed by Ansible, do not modify.
 [global]
 fsid = {{ ceph_fsid }}
 mon_initial_members = {{ names }}
 mon_host = {{ addresses }}
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
 {% if ceph_network_public %}
 public_network = {{ ceph_network_public }}
 {% endif %}
 {% if ceph_network_private %}
-private_network = {{ ceph_network_private }}
+cluster_network = {{ ceph_network_private }}
 {% endif %}
 auth allow insecure global id reclaim = false
 {% if ceph_ipv6_only | bool %}
