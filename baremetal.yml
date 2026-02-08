@@ -2,10 +2,10 @@
   hosts: all
   order: shuffle
   gather_facts: true
-  gather_subset:
-    - "default_ipv4"
-    - "default_ipv6"
-    - "distribution_release"
+# gather_subset:
+#   - "default_ipv4"
+#   - "default_ipv6"
+#   - "distribution_release"
   any_errors_fatal: true
   vars:
     config_root_dir: "{{ '.' | ansible.builtin.realpath }}"
@@ -15,14 +15,8 @@
     ansible_python_interpreter: /usr/bin/python3
   roles:
 #   - role: system_settings
-### - role: netplan
-###   when: ansible_distribution in ("Ubuntu", "Debian")
+#   - role: netplan
 #   - role: ntp
-### - role: nvme
-    - role: ceph
-### - role: linstor
-###   when: ansible_distribution == "Ubuntu" and ansible_distribution_version in ("22.04", "24.04")
-### - role: lvmcluster
-#   - role: ovn
-#     when: ansible_distribution in ("Ubuntu", "Debian")
-#   - role: incus
+#   - role: ceph
+    - role: ovn
+    - role: incus
