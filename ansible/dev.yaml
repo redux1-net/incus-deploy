@@ -1,0 +1,86 @@
+all:
+  vars:
+    ceph_fsid: "baf44752-531e-42fd-8a23-b1201ac34806"
+   #ceph_rbd_cache: "2048Mi"
+   #ceph_rbd_cache_max: "1792Mi"
+   #ceph_rbd_cache_target: "1536Mi"
+    ceph_release: "distro"
+    ceph_ipv6_only: false
+
+    incus_name: "baremetal"
+    incus_release: "stable"
+
+    ovn_name: "baremetal"
+    ovn_az_name: "mainzone"
+    ovn_release: "distro"
+  children:
+    baremetal:
+      vars:
+       #ansible_connection: community.general.incus
+       #ansible_incus_remote: local
+       #ansible_user: root
+       #ansible_become: no
+       #ansible_incus_project: dev-incus-deploy
+
+        incus_init:
+          network:
+            UPLINK:
+              type: physical
+              config:
+                dns.nameservers: 1.1.1.1,1.0.0.1
+                ipv4.gateway: 192.168.254.1/24
+                ipv4.ovn.ranges: 192.168.254.129-192.168.254.190
+                ipv4.routes: 10.0.0.0/8
+                ipv4.routes.anycast: "true"
+                ipv6.gateway: fd41:f666:2a1a:254::1/64
+                ipv6.routes: fdd0:db2::/32
+                ipv6.routes.anycast: "true"
+                mtu: "9000"
+                ovn.ingress_mode: routed
+              local_config:
+                parent: br-uplink
+              description: Physical network for OVN routers
+            default:
+              type: ovn
+              config:
+                network: UPLINK
+              default: true
+              description: Initial OVN network
+          storage:
+            zfs-local:
+              driver: zfs
+              local_config:
+                source: "tank/incus"
+              description: Local ZFS storage pool
+           #ceph-shared:
+           #  driver: ceph
+           #  local_config:
+           #    source: "ceph-incus"
+           #  description: Distributed Ceph storage pool (cluster-wide)
+
+      hosts:
+        ubutest:
+          ansible_host: 192.168.99.111
+          ceph_ip_address: 192.168.201.11
+         #ceph_network_public: 192.168.200.0/24
+          ceph_network_private: 192.168.201.0/24
+          ceph_disks:
+            - data: nvme-SAMSUNG_MZQLB1T9HAJR-00007_S439NC0R704585-part6
+            - data: nvme-Micron_7300_MTFDHBE1T9TDF_221737594F2B-part6
+          ceph_roles:
+            - client
+            - mon
+            - osd
+            - mgr
+            - mds
+
+          ovn_roles:
+            - central
+            - host
+          ovn_ip_address: 192.168.201.11
+
+          incus_roles:
+          - cluster
+          - ui
+          incus_ip_address: 192.168.201.11
+
