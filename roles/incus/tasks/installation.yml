@@ -172,10 +172,8 @@
     and item.value.description is defined | default(None)
   changed_when: true
 
-- debug:
-    msg: Ensure storage is prepared
-
 - pause:
+    prompt: Ensure storage is prepared
 
 - name: Add storage pools
   ansible.builtin.command: >-

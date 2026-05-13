@@ -35,17 +35,18 @@ all:
                 ipv6.gateway: fd41:f666:2a1a:254::1/64
                 ipv6.routes: fdd0:db2::/32
                 ipv6.routes.anycast: "true"
-                mtu: "9000"
+               #mtu: "9000"
+                vlan: 300
                 ovn.ingress_mode: routed
               local_config:
-                parent: br-uplink
+                parent: ovsbr0
               description: Physical network for OVN routers
-            default:
-              type: ovn
-              config:
-                network: UPLINK
-              default: true
-              description: Initial OVN network
+          # default:
+          #   type: ovn
+          #   config:
+          #     network: UPLINK
+          #   default: true
+          #   description: Initial OVN network
           storage:
             zfs-local:
               driver: zfs
@@ -65,14 +66,15 @@ all:
          #ceph_network_public: 192.168.200.0/24
           ceph_network_private: 192.168.201.0/24
           ceph_disks:
-            - data: nvme-SAMSUNG_MZQLB1T9HAJR-00007_S439NC0R704585-part6
-            - data: nvme-Micron_7300_MTFDHBE1T9TDF_221737594F2B-part6
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi0-part6
+            - data: scsi-0QEMU_QEMU_HARDDISK_drive-scsi1-part6
           ceph_roles:
             - client
             - mon
             - osd
             - mgr
             - mds
+            - rgw
 
           ovn_roles:
             - central

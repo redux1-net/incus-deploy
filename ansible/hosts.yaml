@@ -32,20 +32,22 @@ all:
                 ipv4.ovn.ranges: 192.168.254.129-192.168.254.190
                 ipv4.routes: 10.0.0.0/8
                 ipv4.routes.anycast: "true"
-                ipv6.gateway: fd41:f666:2a1a:254::1/64
+                ipv6.gateway: 2a02:1748:fc0c:609e::1/64
+                ipv6.ovn.ranges: 2a02:1748:fc0c:609e:f000::100-2a02:1748:fc0c:609e:f000::200
                 ipv6.routes: fdd0:db2::/32
                 ipv6.routes.anycast: "true"
                 mtu: "9000"
+                vlan: 300
                 ovn.ingress_mode: routed
               local_config:
-                parent: br-uplink
+                parent: ovsbr0
               description: Physical network for OVN routers
-            default:
-              type: ovn
-              config:
-                network: UPLINK
-              default: true
-              description: Initial OVN network
+           #default:
+           #  type: ovn
+           #  config:
+           #    network: UPLINK
+           #  default: true
+           #  description: Initial OVN network
           storage:
             zfs-local:
               driver: zfs
@@ -73,6 +75,7 @@ all:
             - osd
             - mgr
             - mds
+            - rgw
 
           ovn_roles:
             - central
@@ -98,6 +101,7 @@ all:
             - osd
             - mgr
             - mds
+            - rgw
 
           ovn_roles:
             - central
@@ -123,6 +127,7 @@ all:
             - osd
             - mgr
             - mds
+            - rgw
 
           ovn_roles:
             - central

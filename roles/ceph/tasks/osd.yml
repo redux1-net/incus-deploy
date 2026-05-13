@@ -1,8 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
+- pause:
+    prompt: "we are about to bootstrap OSDs, ensure prior config!"
+
 - name: Bootstrap Ceph OSD
   ansible.builtin.command:
-    # TODO --encrypt
+    # TODO encrypt
     cmd: ceph-volume lvm create --dmcrypt --data /dev/disk/by-id/{{ item.data }}{% if "db" in item %} --block.db /dev/disk/by-id/{{ item.db }}{% endif %}
     creates: /var/lib/ceph/osd/.{{ item.data }}.created
   loop: '{{ ceph_disks }}'
