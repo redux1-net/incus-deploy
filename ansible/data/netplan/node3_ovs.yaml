@@ -1,0 +1,89 @@
+# node3
+
+network:
+  version: 2
+  renderer: networkd
+  openvswitch:
+    other-config:
+      hw-offload: true
+
+  ethernets:
+    # loopback IPs for chrony
+    lo:
+      addresses:
+        - 10.1.3.123/32
+        - fdd0:db2:ffff::3:123/128
+
+    vif0:
+      match:
+        macaddress: bc:24:11:16:dc:60
+      set-name: vif0
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+    vif1:
+      match:
+        macaddress: bc:24:11:fb:53:e0
+      set-name: vif1
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+  # OVSBonds
+  bonds:
+    bond0:
+      interfaces:
+        - vif0
+        - vif1
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+      parameters:
+        mode: balance-slb
+      openvswitch: {}
+
+  # OVSBridges
+  bridges:
+    ovsbr0:
+      interfaces:
+        - bond0
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      openvswitch: {}
+
+  # OVSIntPorts
+  vlans:
+    nodemgmt:
+      link: ovsbr0
+      id: 200
+      accept-ra: true
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+      addresses:
+        - 192.168.200.13/24
+        - fd41:f666:2a1a:200::13/64
+      routes:
+        - to: default
+          via: 192.168.200.1
+      nameservers:
+        search:
+          - int.redux1.net
+        addresses:
+          - 10.1.1.53
+
+    clustering:
+      link: ovsbr0
+      id: 201
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+      addresses:
+        - 192.168.201.13/24
+        - fd41:f666:2a1a:201::13/64

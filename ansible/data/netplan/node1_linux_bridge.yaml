@@ -1,0 +1,270 @@
+# node1
+
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    phys25G-0:
+      match:
+        macaddress: 1c:34:da:70:7e:6a
+      set-name: phys25G-0
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+    phys25G-1:
+      match:
+        macaddress: 1c:34:da:70:7e:6b
+      set-name: phys25G-1
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+  bonds:
+    bond0:
+      interfaces:
+        - phys25G-0
+        - phys25G-1
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+      parameters:
+        mode: 802.3ad
+        lacp-rate: fast
+        mii-monitor-interval: 100
+        transmit-hash-policy: layer3+4
+
+  vlans:
+    # main-old
+    bond0.10:
+      link: bond0
+      id: 10
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # guest-old
+    bond0.20:
+      link: bond0
+      id: 20
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wan-fonira
+    bond0.31:
+      link: bond0
+      id: 31
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # mgmt-old
+    bond0.99:
+      link: bond0
+      id: 99
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # srv-old
+    bond0.100:
+      link: bond0
+      id: 100
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # inframgmt
+    bond0.101:
+      link: bond0
+      id: 101
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wifimgmt
+    bond0.102:
+      link: bond0
+      id: 102
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # bmc
+    bond0.103:
+      link: bond0
+      id: 103
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # nodemgmt
+    bond0.200:
+      link: bond0
+      id: 200
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # clustering
+    bond0.201:
+      link: bond0
+      id: 201
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # uplink
+    bond0.300:
+      link: bond0
+      id: 300
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+  bridges:
+    # main-old
+    br-main-old:
+      interfaces:
+        - bond0.10
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # guest-old
+    br-guest-old:
+      interfaces:
+        - bond0.20
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wan-fonira
+    br-wanfonira:
+      interfaces:
+        - bond0.31
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # mgmt-old
+    br-mgmt-old:
+      interfaces:
+        - bond0.99
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # srv-old
+    br-srv-old:
+      interfaces:
+        - bond0.100
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # inframgmt
+    br-inframgmt:
+      interfaces:
+        - bond0.101
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wifimgmt
+    br-wifimgmt:
+      interfaces:
+        - bond0.102
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # bmc
+    br-bmc:
+      interfaces:
+        - bond0.103
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # nodemgmt
+    br-nodemgmt:
+      interfaces:
+        - bond0.200
+      accept-ra: true
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+      addresses:
+        - 192.168.200.11/24
+      routes:
+        - to: default
+          via: 192.168.200.1
+      nameservers:
+        search:
+          - int.redux1.net
+        addresses:
+          - 10.1.1.53
+
+    # clustering
+    br-clustering:
+      interfaces:
+        - bond0.201
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+      addresses:
+        - 192.168.201.11/24
+
+    # uplink
+    br-uplink:
+      interfaces:
+        - bond0.300
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000

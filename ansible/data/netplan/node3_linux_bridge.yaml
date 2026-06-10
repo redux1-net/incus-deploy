@@ -1,0 +1,249 @@
+# node3
+
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    vif0:
+      match:
+        macaddress: bc:24:11:16:dc:60
+      set-name: vif0
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+# bonds:
+
+  vlans:
+    # main-old
+    vif0.10:
+      link: vif0
+      id: 10
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # guest-old
+    vif0.20:
+      link: vif0
+      id: 20
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wan-fonira
+    vif0.31:
+      link: vif0
+      id: 31
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # mgmt-old
+    vif0.99:
+      link: vif0
+      id: 99
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # srv-old
+    vif0.100:
+      link: vif0
+      id: 100
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # inframgmt
+    vif0.101:
+      link: vif0
+      id: 101
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wifimgmt
+    vif0.102:
+      link: vif0
+      id: 102
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # bmc
+    vif0.103:
+      link: vif0
+      id: 103
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # nodemgmt
+    vif0.200:
+      link: vif0
+      id: 200
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # clustering
+    vif0.201:
+      link: vif0
+      id: 201
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # uplink
+    vif0.300:
+      link: vif0
+      id: 300
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+  bridges:
+    # main-old
+    br-main-old:
+      interfaces:
+        - vif0.10
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+
+    # guest-old
+    br-guest-old:
+      interfaces:
+        - vif0.20
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wan-fonira
+    br-wanfonira:
+      interfaces:
+        - vif0.31
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # mgmt-old
+    br-mgmt-old:
+      interfaces:
+        - vif0.99
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # srv-old
+    br-srv-old:
+      interfaces:
+        - vif0.100
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # inframgmt
+    br-inframgmt:
+      interfaces:
+        - vif0.101
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # wifimgmt
+    br-wifimgmt:
+      interfaces:
+        - vif0.102
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # bmc
+    br-bmc:
+      interfaces:
+        - vif0.103
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+
+    # nodemgmt
+    br-nodemgmt:
+      interfaces:
+        - vif0.200
+      accept-ra: true
+      dhcp4: false
+      dhcp6: false
+      mtu: 1500
+      addresses:
+        - 192.168.200.13/24
+      routes:
+        - to: default
+          via: 192.168.200.1
+      nameservers:
+        search:
+          - int.redux1.net
+        addresses:
+          - 10.1.1.53
+
+    # clustering
+    br-clustering:
+      interfaces:
+        - vif0.201
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+      addresses:
+        - 192.168.201.13/24
+
+    # uplink
+    br-uplink:
+      interfaces:
+        - vif0.300
+      link-local: []
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
