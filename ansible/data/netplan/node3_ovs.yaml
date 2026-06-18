@@ -22,6 +22,9 @@ network:
       dhcp4: false
       dhcp6: false
       mtu: 9000
+      # offload issues due to virtualization
+      receive-checksum-offload: true
+      transmit-checksum-offload: false
     vif1:
       match:
         macaddress: bc:24:11:fb:53:e0
@@ -30,6 +33,9 @@ network:
       dhcp4: false
       dhcp6: false
       mtu: 9000
+      # offload issues due to virtualization
+      receive-checksum-offload: true
+      transmit-checksum-offload: false
 
   # OVSBonds
   bonds:
