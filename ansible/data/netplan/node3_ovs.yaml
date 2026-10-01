@@ -14,10 +14,29 @@ network:
         - 10.1.3.123/32
         - fdd0:db2:ffff::3:123/128
 
+    mlx0:
+      match:
+        macaddress: b8:ce:f6:27:bd:30
+      set-name: mlx0
+      optional: true
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
+    mlx1:
+      match:
+        macaddress: b8:ce:f6:27:bd:31
+      set-name: mlx1
+      optional: true
+      accept-ra: false
+      dhcp4: false
+      dhcp6: false
+      mtu: 9000
     vif0:
       match:
         macaddress: bc:24:11:16:dc:60
       set-name: vif0
+      optional: true
       accept-ra: false
       dhcp4: false
       dhcp6: false
@@ -29,6 +48,7 @@ network:
       match:
         macaddress: bc:24:11:fb:53:e0
       set-name: vif1
+      optional: true
       accept-ra: false
       dhcp4: false
       dhcp6: false
@@ -41,6 +61,8 @@ network:
   bonds:
     bond0:
       interfaces:
+        - mlx0
+        - mlx1
         - vif0
         - vif1
       accept-ra: false
@@ -48,8 +70,13 @@ network:
       dhcp6: false
       mtu: 9000
       parameters:
-        mode: balance-slb
-      openvswitch: {}
+        mode: balance-tcp
+      openvswitch:
+        lacp: active
+        other-config:
+          lacp-time: fast
+          bond-detect-mode: miimon
+          bond-miimon-interval: 100
 
   # OVSBridges
   bridges:
@@ -71,6 +98,7 @@ network:
       dhcp4: false
       dhcp6: false
       mtu: 1500
+      optional: false
       addresses:
         - 192.168.200.13/24
         - fd41:f666:2a1a:200::13/64

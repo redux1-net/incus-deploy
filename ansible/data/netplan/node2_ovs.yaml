@@ -70,6 +70,7 @@ network:
       dhcp4: false
       dhcp6: false
       mtu: 1500
+      optional: false
       addresses:
         - 192.168.200.12/24
         - fd41:f666:2a1a:200::12/64
