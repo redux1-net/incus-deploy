@@ -75,7 +75,7 @@ all:
             - osd
             - mgr
             - mds
-            - rgw
+           #- rgw
 
           ovn_roles:
             - central
@@ -101,7 +101,7 @@ all:
             - osd
             - mgr
             - mds
-            - rgw
+           #- rgw
 
           ovn_roles:
             - central
@@ -127,7 +127,7 @@ all:
             - osd
             - mgr
             - mds
-            - rgw
+           #- rgw
 
           ovn_roles:
             - central
