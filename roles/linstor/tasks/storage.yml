@@ -30,7 +30,13 @@
   ansible.builtin.command: >-
     linstor physical-storage create-device-pool --storage-pool {{ linstor_pool_name }}
     --pool-name linstor-{{ linstor_pool_name }} {{ linstor_pool_driver }} {{ item }}
-    {{ linstor_mapped_disks | join(' ') }}
+    {{
+      (
+        hostvars[item]["linstor_disks"] | default([])
+        | map('regex_replace', '^((?!/dev/disk/by-id/).*)$', '/dev/disk/by-id/\1')
+        | list
+      ) | join(' ')
+    }}
   register: linstor_create_storage_pool_output
   loop: "{{ ansible_play_hosts }}"
   when: >

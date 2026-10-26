@@ -3,4 +3,3 @@
 linstor_roles: []
 linstor_pool_name: "incus"
 linstor_pool_driver: "lvmthin"
-linstor_mapped_disks: []
